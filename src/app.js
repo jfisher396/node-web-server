@@ -23,14 +23,14 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.get("", (req, res) => {
   res.render("index", {
     title: "Weather",
-    name: "Lincoln Fisher",
+    name: "James Fisher",
   });
 });
 
 app.get("/about", (req, res) => {
   res.render("about", {
     title: "About",
-    name: "Lincoln Fisher",
+    name: "James Fisher",
   });
 });
 
@@ -38,7 +38,7 @@ app.get("/help", (req, res) => {
   res.render("help", {
     title: "Help!",
     message: "I need somebody!",
-    name: "Lincoln Fisher",
+    name: "James Fisher",
   });
 });
 
@@ -51,18 +51,18 @@ app.get("/weather", (req, res) => {
 
   geocode(req.query.address, (err, { latitude, longitude, location } = {}) => {
     if (err) {
-      return console.log(err);
+      return res.send({ err });
     }
 
     // forecast function requires 3 arguments: latitude, longitude and a callback function
     forecast(latitude, longitude, (err, forecastData) => {
       if (err) {
-        return console.log(err);
+        return res.send({ err });
       }
 
       res.send({
         forecast: forecastData,
-        city: location,
+        location,
         address: req.query.address,
       });
     });
