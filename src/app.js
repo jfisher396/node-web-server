@@ -1,6 +1,10 @@
+require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const hbs = require("hbs");
+
+const geocode = require("./utils/geocode");
+const forecast = require("./utils/forecast");
 
 const app = express();
 const viewsPath = path.join(__dirname, "../templates/views");
@@ -45,10 +49,23 @@ app.get("/weather", (req, res) => {
     });
   }
 
-  res.send({
-    forecast: "Rain",
-    city: "Seattle",
-    address: req.query.address,
+  geocode(req.query.address, (err, { latitude, longitude, location } = {}) => {
+    if (err) {
+      return console.log(err);
+    }
+
+    // forecast function requires 3 arguments: latitude, longitude and a callback function
+    forecast(latitude, longitude, (err, forecastData) => {
+      if (err) {
+        return console.log(err);
+      }
+
+      res.send({
+        forecast: forecastData,
+        city: location,
+        address: req.query.address,
+      });
+    });
   });
 });
 
