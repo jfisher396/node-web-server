@@ -13,7 +13,9 @@ weatherForm.addEventListener("submit", (e) => {
   const location = search.value;
 
   if (!location) {
-    console.log("You must enter a valid search term.");
+
+    messageOne.textContent = "You must enter a valid search term.";
+    
   } else {
     fetch(`http://localhost:3000/weather?address=${location}`).then((res) => {
       res.json().then((data) => {
