@@ -5,7 +5,7 @@ const location = (latitude, longitude, callback) => {
     process.env.WEATHERSTACK_API_URL + latitude + "," + longitude + "&units=f";
 
   request({ url, json: true }, (err, { body } = {}) => {
-    // console.log(res.body.current)
+    // console.log(body.current)
     if (err) {
       callback("Unable to connect to WeatherStack API.", undefined);
     } else if (body.error) {
@@ -16,7 +16,7 @@ const location = (latitude, longitude, callback) => {
     } else {
       callback(
         undefined,
-        `It is currently ${body.current.weather_descriptions[0]} with a temperature of ${body.current.temperature} degrees. It feels like ${body.current.feelslike} degrees out.`
+        `It is currently ${body.current.weather_descriptions[0]} with a temperature of ${body.current.temperature} degrees, but feels like ${body.current.feelslike} degrees. The humidity is ${body.current.humidity}%.`
       );
     }
   });
